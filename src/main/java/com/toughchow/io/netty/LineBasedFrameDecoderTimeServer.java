@@ -8,12 +8,14 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * Created by toughChow
  * 2019-03-14 11:03
  */
-public class TimeServer {
+public class LineBasedFrameDecoderTimeServer {
 
     public void bind(int port) throws Exception {
         /*  配置服务端的NIO线程组
@@ -23,7 +25,6 @@ public class TimeServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-
             // ServerBootstrap是Netty用于启动NIO服务端的辅助启动类，目的是降低服务端的开发复杂度
             ServerBootstrap b = new ServerBootstrap();
             // 将两个NIO线程组当作入参传递到ServerBootstrap中
@@ -47,12 +48,14 @@ public class TimeServer {
 
         @Override
         protected void initChannel(SocketChannel arg0) throws Exception {
-            arg0.pipeline().addLast(new WithOutConsiderTCPStickyTimeServerHandler());
+            arg0.pipeline().addLast(new LineBasedFrameDecoder(1024));
+            arg0.pipeline().addLast(new StringDecoder());
+            arg0.pipeline().addLast(new LineBaseFrameDecoderTimeServerHandler());
         }
     }
 
     public static void main(String[] args) throws Exception {
         int port = 8081;
-        new TimeServer().bind(port);
+        new LineBasedFrameDecoderTimeServer().bind(port);
     }
 }
