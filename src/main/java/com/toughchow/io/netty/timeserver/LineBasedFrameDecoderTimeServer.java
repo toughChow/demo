@@ -1,4 +1,4 @@
-package com.toughchow.io.netty;
+package com.toughchow.io.netty.timeserver;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

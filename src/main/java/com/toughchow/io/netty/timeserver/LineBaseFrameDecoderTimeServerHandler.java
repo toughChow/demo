@@ -1,4 +1,4 @@
-package com.toughchow.io.netty;
+package com.toughchow.io.netty.timeserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

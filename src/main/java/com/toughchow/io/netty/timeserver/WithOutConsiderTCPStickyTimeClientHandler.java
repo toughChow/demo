@@ -1,4 +1,4 @@
-package com.toughchow.io.netty;
+package com.toughchow.io.netty.timeserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -11,16 +11,16 @@ import java.util.logging.Logger;
  * Created by toughChow
  * 2019-03-14 14:56
  */
-public class LineBaseFrameDecoderTimeClientHandler extends ChannelHandlerAdapter {
+public class WithOutConsiderTCPStickyTimeClientHandler extends ChannelHandlerAdapter {
 
     private static final Logger logger = Logger
-            .getLogger(LineBaseFrameDecoderTimeClientHandler.class.getName());
+            .getLogger(WithOutConsiderTCPStickyTimeClientHandler.class.getName());
 
     private int counter;
 
     private byte[] req;
 
-    public LineBaseFrameDecoderTimeClientHandler() {
+    public WithOutConsiderTCPStickyTimeClientHandler() {
         req = ("QUERY TIME ORDER" + System.getProperty("line.separator"))
                 .getBytes();
     }
@@ -43,7 +43,10 @@ public class LineBaseFrameDecoderTimeClientHandler extends ChannelHandlerAdapter
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        String body = (String) msg;
+        ByteBuf buf = (ByteBuf) msg;
+        byte[] req = new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        String body = new String(req, "UTF-8");
         System.out.println("Now is : " + body + " ; the counter is : " + ++counter);
     }
 }
